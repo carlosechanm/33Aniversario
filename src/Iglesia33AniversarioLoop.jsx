@@ -3,27 +3,30 @@ import { motion, AnimatePresence } from "framer-motion";
 import { Sparkles, Flame, Church, Star } from "lucide-react";
 
 const SCENE_DURATION = 8000;
+const scenePhotos = {
+  welcome: "/fotos/bienvenidos-iglesia.jpg",
+};
 
-const participationItems = [
+const testimonyItems = [
   {
     title: "Hna. Pastora Tec",
     subtitle: "Dios nos ha ayudado en las pruebas y en las victorias",
-    badge: "Salvos para servir",
+    highlight: "Salvos para servir",
   },
   {
     title: "Pbro. Manuel Chan",
     subtitle: "33 años viendo la fidelidad de Dios",
-    badge: "Llamadas a servir",
+    highlight: "Llamadas a servir",
   },
   {
     title: "Pbro. Lizzie Haas",
     subtitle: "Firmes en fe, amor y servicio",
-    badge: "Sirviendo con propósito",
+    highlight: "Sirviendo con propósito",
   },
   {
     title: "Hno. Pedro Pat",
     subtitle: "Hemos visto la misericordia del Dios en cada etapa",
-    badge: "Hasta aquí nos ayudó Jehová",
+    highlight: "Hasta aquí nos ayudó Jehová",
   },
 ];
 
@@ -118,7 +121,57 @@ function SceneShell({ children }) {
       exit={{ opacity: 0, scale: 1.015, filter: "blur(10px)" }}
       transition={{ duration: 1.1, ease: "easeInOut" }}
     >
-      <div className="mx-auto w-full max-w-5xl">{children}</div>
+      <div className="mx-auto w-full max-w-6xl">{children}</div>
+    </motion.div>
+  );
+}
+
+function ScenePhoto({ src, alt, caption, className = "", imageClassName = "" }) {
+  const [imageError, setImageError] = useState(false);
+
+  if (imageError) {
+    return (
+      <div className={`relative overflow-hidden rounded-[2.25rem] border border-white/10 bg-white/[0.08] p-6 text-left backdrop-blur-md ${className}`}>
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_top,rgba(251,191,36,0.18),transparent_35%),linear-gradient(180deg,rgba(255,255,255,0.08),rgba(15,23,42,0.35))]" />
+        <div className="relative z-10 flex min-h-[340px] flex-col justify-end">
+          <div className="mb-3 inline-flex w-fit items-center gap-2 rounded-full border border-amber-300/25 bg-amber-300/10 px-3 py-1 text-xs uppercase tracking-[0.28em] text-amber-200">
+            <Church className="h-4 w-4" />
+            Foto actual
+          </div>
+          <h3 className="max-w-md text-2xl font-semibold text-white md:text-3xl">
+            Subí una foto en <span className="text-amber-300">/public/fotos/bienvenidos-iglesia.jpg</span>
+          </h3>
+          <p className="mt-4 max-w-lg text-sm text-white/75 md:text-base">{caption}</p>
+        </div>
+      </div>
+    );
+  }
+
+  return (
+    <motion.div
+      initial={{ opacity: 0, y: 22, scale: 0.98 }}
+      animate={{ opacity: 1, y: 0, scale: 1 }}
+      transition={{ delay: 0.45, duration: 0.9 }}
+      className={`relative overflow-hidden rounded-[2.25rem] border border-white/10 bg-white/[0.08] shadow-2xl shadow-black/30 ${className}`}
+    >
+      <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/35 to-transparent" />
+      <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_right,rgba(251,191,36,0.22),transparent_28%)]" />
+      <img
+        src={src}
+        alt={alt}
+        className={`h-[420px] w-full object-cover md:h-[620px] ${imageClassName}`}
+        onError={() => setImageError(true)}
+      />
+      <div className="absolute inset-x-0 top-0 flex justify-end p-4 md:p-6">
+        <div className="rounded-full border border-white/15 bg-slate-950/35 px-4 py-2 text-xs uppercase tracking-[0.28em] text-white/85 backdrop-blur-md">Foto actual</div>
+      </div>
+      <div className="absolute inset-x-0 bottom-0 p-6 md:p-8">
+        <div className="inline-flex items-center gap-2 rounded-full border border-white/15 bg-slate-950/40 px-3 py-1 text-xs uppercase tracking-[0.28em] text-white/85 backdrop-blur-md">
+          <Church className="h-4 w-4 text-amber-300" />
+          Centro Evangelistico "Peniel"
+        </div>
+        <p className="mt-4 max-w-xl text-sm text-white/75 md:text-base">{caption}</p>
+      </div>
     </motion.div>
   );
 }
@@ -126,33 +179,55 @@ function SceneShell({ children }) {
 function SceneWelcome() {
   return (
     <SceneShell>
-      <div className="text-center text-white">
-        <motion.div
-          initial={{ opacity: 0, y: 24 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.2, duration: 0.9 }}
-          className="mb-6 inline-flex items-center gap-2 rounded-full border border-amber-300/20 bg-amber-300/10 px-4 py-2 text-sm uppercase tracking-[0.25em] text-amber-200"
-        >
-          <Sparkles className="h-4 w-4" /> Bienvenidos
-        </motion.div>
+      <div className="grid items-center gap-8 md:grid-cols-[0.88fr_1.12fr]">
+        <div className="order-2 text-center text-white md:order-1 md:text-left">
+          <motion.div
+            initial={{ opacity: 0, y: 24 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.15, duration: 0.9 }}
+            className="mb-6 inline-flex items-center gap-2 rounded-full border border-amber-300/20 bg-amber-300/10 px-4 py-2 text-sm uppercase tracking-[0.25em] text-amber-200"
+          >
+            <Sparkles className="h-4 w-4" /> Bienvenidos
+          </motion.div>
 
-        <motion.h1
-          initial={{ opacity: 0, y: 24 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.35, duration: 0.9 }}
-          className="text-4xl font-semibold leading-tight md:text-7xl"
-        >
-          Celebramos <span className="text-amber-300">33 años</span>
-        </motion.h1>
+          <motion.h1
+            initial={{ opacity: 0, y: 24 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.3, duration: 0.9 }}
+            className="text-5xl font-semibold leading-[0.95] md:text-8xl"
+          >
+            <span className="block text-white">Bienvenidos</span>
+            <span className="mt-3 block text-2xl font-medium text-white/75 md:text-4xl">
+              a celebrar
+            </span>
+            <span className="mt-3 block text-amber-300">33 años</span>
+          </motion.h1>
 
-        <motion.p
-          initial={{ opacity: 0, y: 22 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.5, duration: 0.9 }}
-          className="mx-auto mt-6 max-w-3xl text-lg text-white/80 md:text-2xl"
-        >
-          de la fidelidad de Dios
-        </motion.p>
+          <motion.p
+            initial={{ opacity: 0, y: 22 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.45, duration: 0.9 }}
+            className="mt-6 max-w-2xl text-lg text-white/80 md:text-2xl"
+          >
+            de la fidelidad de Dios en Centro Evangelistico "Peniel"
+          </motion.p>
+
+          <motion.div
+            initial={{ opacity: 0, y: 22 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.6, duration: 0.9 }}
+            className="mt-8 inline-flex rounded-full border border-white/10 bg-white/[0.06] px-5 py-3 text-sm uppercase tracking-[0.28em] text-white/80 backdrop-blur-md"
+          >
+            Una historia viva de fe, gracia y servicio
+          </motion.div>
+        </div>
+
+        <ScenePhoto
+          className="order-1 min-h-[420px] md:order-2"
+          imageClassName="md:scale-[1.03]"
+          src={scenePhotos.welcome}
+          alt='Foto actual de Centro Evangelistico "Peniel"'
+        />
       </div>
     </SceneShell>
   );
@@ -292,15 +367,18 @@ function ScenePurpose() {
   );
 }
 
-function SceneParticipation({ cycle }) {
-  const item = randomFrom(participationItems, cycle);
+function SceneTestimonies({ cycle }) {
+  const item = randomFrom(testimonyItems, cycle);
 
   return (
     <SceneShell>
       <div className="mx-auto max-w-4xl rounded-[2rem] border border-white/10 bg-white/[0.06] p-6 text-center text-white shadow-2xl shadow-black/20 backdrop-blur-md md:p-10">
-        <div className="mb-4 text-sm uppercase tracking-[0.35em] text-amber-200">Participación</div>
+        <div className="mb-4 text-sm uppercase tracking-[0.35em] text-amber-200">Testimonios</div>
         <h2 className="text-3xl font-semibold md:text-6xl">{item.title}</h2>
         <p className="mx-auto mt-5 max-w-2xl text-lg text-white/80 md:text-2xl">{item.subtitle}</p>
+        <div className="mt-8 inline-flex rounded-full border border-amber-300/20 bg-amber-300/10 px-5 py-3 text-sm uppercase tracking-[0.25em] text-amber-200 md:text-base">
+          {item.highlight}
+        </div>
       </div>
     </SceneShell>
   );
@@ -331,7 +409,7 @@ export default function Iglesia33AniversarioLoop() {
       SceneProcess,
       ScenePresent,
       ScenePurpose,
-      SceneParticipation,
+      SceneTestimonies,
       SceneFuture,
     ],
     []
@@ -351,4 +429,6 @@ export default function Iglesia33AniversarioLoop() {
     </div>
   );
 }
+
+
 
