@@ -813,8 +813,12 @@ function SceneTestimonies({ cycle }) {
     <SceneShell>
       <div className="mx-auto max-w-6xl text-center text-white">
         <div className="mb-4 text-sm uppercase tracking-[0.35em] text-amber-200">Testimonios</div>
-        <h2 className="text-4xl font-semibold md:text-6xl">Lo que Dios ha hecho en:</h2>
-        <h2 className="text-4xl font-semibold md:text-6xl">{CHURCH_NAME}</h2>
+        <div>
+          <h2 className="text-4xl font-semibold md:text-6xl">Lo que Dios ha hecho en</h2>
+          <p className="mt-3 bg-gradient-to-r from-amber-200 via-white to-amber-300 bg-clip-text text-2xl font-black uppercase tracking-[0.14em] text-transparent drop-shadow-[0_0_18px_rgba(251,191,36,0.24)] md:text-5xl">
+            {CHURCH_NAME}
+          </p>
+        </div>
         <p className="mx-auto mt-5 max-w-3xl text-lg text-white/78 md:text-2xl">
           Muchas voces, muchas experiencias y una misma fidelidad de Dios obrando en la iglesia.
         </p>
