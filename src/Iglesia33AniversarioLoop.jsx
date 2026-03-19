@@ -6,7 +6,8 @@ const SCENE_DURATION = 8000;
 const CHURCH_NAME = 'CENTRO EVANGELISTICO "PENIEL"';
 
 function assetUrl(path) {
-  return new URL(path, import.meta.env.BASE_URL).toString();
+  const base = import.meta.env.BASE_URL || "/";
+  return (base + path).replace(/(?<!:)\/\/+/g, "/");
 }
 
 const scenePhotos = {
