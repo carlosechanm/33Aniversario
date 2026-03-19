@@ -1,6 +1,6 @@
 import React, { useEffect, useMemo, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Sparkles, Flame, Church, Star } from "lucide-react";
+import { Sparkles, Flame, Church, Star, Pause, Play } from "lucide-react";
 
 const SCENE_DURATION = 8000;
 const CHURCH_NAME = 'CENTRO EVANGELISTICO "PENIEL"';
@@ -59,11 +59,6 @@ const testimonyItems = [
   },
 ];
 
-const verses = [
-  "Hasta aquí nos ayudó Jehová",
-  "Grandes cosas ha hecho Jehová con nosotros",
-  "Jesucristo es el mismo ayer, hoy y por los siglos",
-];
 
 function randomFrom(items, index) {
   return items[index % items.length];
@@ -75,11 +70,13 @@ function pickTwoFrom(items, index) {
   return [first, second];
 }
 
-function useSceneLoop(totalScenes, duration) {
+function useSceneLoop(totalScenes, duration, isPaused = false) {
   const [sceneIndex, setSceneIndex] = useState(0);
   const [cycle, setCycle] = useState(0);
 
   useEffect(() => {
+    if (isPaused) return undefined;
+
     const id = window.setInterval(() => {
       setSceneIndex((prev) => {
         const next = (prev + 1) % totalScenes;
@@ -89,7 +86,7 @@ function useSceneLoop(totalScenes, duration) {
     }, duration);
 
     return () => window.clearInterval(id);
-  }, [totalScenes, duration]);
+  }, [totalScenes, duration, isPaused]);
 
   return { sceneIndex, cycle };
 }
@@ -132,18 +129,40 @@ function AnimatedBackground() {
   );
 }
 
-function FixedBrand() {
+function FixedBrand({ isPaused, onTogglePause }) {
   return (
-    <div className="pointer-events-none absolute inset-x-0 bottom-0 z-20 flex items-center justify-between px-6 py-5 text-white/80 md:px-10">
-      <div className="flex items-center gap-3 rounded-full border border-white/10 bg-white/5 px-4 py-2 backdrop-blur-md">
-        <Church className="h-4 w-4 text-amber-300" />
-        <span className="text-xs uppercase tracking-[0.25em] md:text-sm">33 años de fundación</span>
+    <>
+      <div className="pointer-events-none absolute inset-x-0 bottom-0 z-20 flex items-center justify-between px-6 py-5 text-white/80 md:px-10">
+        <div className="flex items-center gap-3 rounded-full border border-white/10 bg-white/5 px-4 py-2 backdrop-blur-md">
+          <Church className="h-4 w-4 text-amber-300" />
+          <span className="text-xs uppercase tracking-[0.25em] md:text-sm">33 años de fundación</span>
+        </div>
+
+        <div className="hidden rounded-full border border-white/10 bg-white/5 px-4 py-2 text-xs uppercase tracking-[0.3em] backdrop-blur-md md:block">
+          Salvos para servir
+        </div>
       </div>
 
-      <div className="hidden rounded-full border border-white/10 bg-white/5 px-4 py-2 text-xs uppercase tracking-[0.3em] backdrop-blur-md md:block">
-        Salvos para servir
+      <div className="absolute right-6 top-6 z-30 md:right-10 md:top-8">
+        <button
+          type="button"
+          onClick={onTogglePause}
+          className="inline-flex items-center gap-2 rounded-full border border-white/15 bg-slate-950/45 px-4 py-2 text-xs uppercase tracking-[0.24em] text-white/90 backdrop-blur-md transition hover:bg-slate-950/65"
+        >
+          {isPaused ? (
+            <>
+              <Play className="h-4 w-4 text-amber-300" />
+              Reanudar
+            </>
+          ) : (
+            <>
+              <Pause className="h-4 w-4 text-amber-300" />
+              Pausar
+            </>
+          )}
+        </button>
       </div>
-    </div>
+    </>
   );
 }
 
@@ -494,9 +513,6 @@ function SceneOrigin() {
                       onError={() => handleImageError(index)}
                     />
                     <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/20 to-transparent" />
-                    <div className="absolute left-4 top-4 rounded-full border border-white/15 bg-slate-950/35 px-3 py-1 text-xs uppercase tracking-[0.25em] text-white/85 backdrop-blur-md">
-                      Inicio {index + 1}
-                    </div>
                   </>
                 )}
               </motion.div>
@@ -586,9 +602,6 @@ function SceneProcess({ cycle }) {
                       onError={() => handleImageError(index)}
                     />
                     <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/18 to-transparent" />
-                    <div className="absolute left-4 top-4 rounded-full border border-white/15 bg-slate-950/35 px-3 py-1 text-xs uppercase tracking-[0.25em] text-white/85 backdrop-blur-md">
-                      Etapa {index + 1}
-                    </div>
                   </>
                 )}
               </motion.div>
@@ -619,18 +632,17 @@ function ScenePresent({ cycle }) {
 
   return (
     <SceneShell>
-      <div className="space-y-8 text-white">
-        <div className="text-center">
+      <div className="-translate-y-2 space-y-6 text-white md:-translate-y-6">
+        <div className="relative text-center">
           <motion.div
-            className="mx-auto mb-6 h-40 w-40 rounded-full bg-amber-200/10 blur-2xl"
+            className="pointer-events-none absolute left-1/2 top-0 h-28 w-28 -translate-x-1/2 rounded-full bg-amber-200/10 blur-2xl md:h-32 md:w-32"
             animate={{ scale: [1, 1.2, 1], opacity: [0.2, 0.4, 0.2] }}
             transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
           />
-          <h2 className="text-4xl font-semibold md:text-6xl">Hoy seguimos viendo su fidelidad</h2>
-          <p className="mx-auto mt-6 max-w-3xl text-lg text-white/80 md:text-2xl">
-            {randomFrom(verses, cycle)}
-          </p>
-          <p className="mx-auto mt-4 max-w-3xl text-base text-white/72 md:text-xl">
+          <div className="relative z-10 pt-3 md:pt-4">
+            <h2 className="text-4xl font-semibold md:text-6xl">Hoy seguimos viendo su fidelidad</h2>
+          </div>
+          <p className="mx-auto mt-3 max-w-3xl text-base text-white/72 md:text-lg">
             "Jesucristo es el mismo ayer, y hoy, y por los siglos."
             <span className="mt-3 block text-sm uppercase tracking-[0.22em] text-amber-200/90 md:text-base">
               Hebreos 13:8
@@ -644,11 +656,11 @@ function ScenePresent({ cycle }) {
             const isLarge = index === 0;
             const wrapperClass = [
               "relative overflow-hidden rounded-[2rem] border border-white/10 bg-white/[0.07] shadow-2xl shadow-black/25",
-              isLarge ? "min-h-[420px]" : "min-h-[205px]",
+              isLarge ? "min-h-[360px] md:min-h-[380px]" : "min-h-[170px] md:min-h-[185px]",
             ].join(" ");
             const imageClass = [
               "w-full object-cover",
-              isLarge ? "h-[420px]" : "h-[205px]",
+              isLarge ? "h-[360px] md:h-[380px]" : "h-[170px] md:h-[185px]",
             ].join(" ");
 
             return (
@@ -660,7 +672,7 @@ function ScenePresent({ cycle }) {
                 className={wrapperClass}
               >
                 {hasError ? (
-                  <div className={["relative flex items-end p-6", isLarge ? "h-[420px]" : "h-[205px]"].join(" ")}>
+                  <div className={["relative flex items-end p-6", isLarge ? "h-[360px] md:h-[380px]" : "h-[170px] md:h-[185px]"].join(" ")}>
                     <div className="absolute inset-0 bg-[radial-gradient(circle_at_top,rgba(251,191,36,0.18),transparent_35%),linear-gradient(180deg,rgba(255,255,255,0.08),rgba(15,23,42,0.65))]" />
                     <div className="relative z-10">
                       <div className="mb-3 inline-flex items-center gap-2 rounded-full border border-amber-300/20 bg-amber-300/10 px-3 py-1 text-xs uppercase tracking-[0.25em] text-amber-200">
@@ -680,9 +692,6 @@ function ScenePresent({ cycle }) {
                       onError={() => handleImageError(index)}
                     />
                     <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/18 to-transparent" />
-                    <div className="absolute left-4 top-4 rounded-full border border-white/15 bg-slate-950/35 px-3 py-1 text-xs uppercase tracking-[0.25em] text-white/85 backdrop-blur-md">
-                      Presente {index + 1}
-                    </div>
                   </>
                 )}
               </motion.div>
@@ -703,10 +712,10 @@ function ScenePurpose() {
 
   return (
     <SceneShell>
-      <div className="space-y-8 text-white">
-        <div className="text-center">
+      <div className="-translate-y-2 space-y-6 text-white md:-translate-y-6">
+        <div className="relative text-center">
           <motion.div
-            className="mx-auto mb-8 flex h-24 w-24 items-center justify-center rounded-full border border-amber-300/30 bg-amber-300/10"
+            className="pointer-events-none absolute left-1/2 top-0 flex h-24 w-24 -translate-x-1/2 items-center justify-center rounded-full border border-amber-300/30 bg-amber-300/10"
             animate={{
               scale: [1, 1.12, 1],
               boxShadow: [
@@ -724,7 +733,7 @@ function ScenePurpose() {
             initial={{ opacity: 0, y: 18 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.15, duration: 0.8 }}
-            className="text-lg text-white/75 md:text-2xl"
+            className="relative z-10 pt-2 text-lg text-white/75 md:pt-3 md:text-2xl"
           >
             Fuimos alcanzados por gracia...
           </motion.p>
@@ -733,7 +742,7 @@ function ScenePurpose() {
             initial={{ opacity: 0, y: 18 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.45, duration: 0.8 }}
-            className="mt-4 text-xl text-white/85 md:text-3xl"
+            className="mt-3 text-xl text-white/85 md:text-3xl"
           >
             No solo para recibir...
           </motion.p>
@@ -742,7 +751,7 @@ function ScenePurpose() {
             initial={{ opacity: 0, y: 18 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.7, duration: 0.8 }}
-            className="mt-4 text-2xl font-semibold text-amber-200 md:text-4xl"
+            className="mt-3 text-2xl font-semibold text-amber-200 md:text-4xl"
           >
             Sino para servir con amor y propósito.
           </motion.p>
@@ -782,9 +791,6 @@ function ScenePurpose() {
                         onError={() => handleImageError(index)}
                       />
                       <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/18 to-transparent" />
-                      <div className="absolute left-4 top-4 rounded-full border border-white/15 bg-slate-950/35 px-3 py-1 text-xs uppercase tracking-[0.25em] text-white/85 backdrop-blur-md">
-                        Actividad {index + 1}
-                      </div>
                     </>
                   )}
                 </motion.div>
@@ -819,9 +825,6 @@ function ScenePurpose() {
                   onError={() => handleImageError(2)}
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/18 to-transparent" />
-                <div className="absolute left-4 top-4 rounded-full border border-white/15 bg-slate-950/35 px-3 py-1 text-xs uppercase tracking-[0.25em] text-white/85 backdrop-blur-md">
-                  Actividad 3
-                </div>
               </>
             )}
           </motion.div>
@@ -831,7 +834,7 @@ function ScenePurpose() {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.5, duration: 0.85 }}
-          className="mx-auto max-w-4xl text-center text-base text-white/76 md:text-xl"
+          className="mx-auto max-w-4xl text-center text-base text-white/76 md:text-lg"
         >
           "Cada uno según el don que ha recibido, minístrelo a los otros, como buenos
           administradores de la multiforme gracia de Dios."
@@ -844,7 +847,7 @@ function ScenePurpose() {
           initial={{ opacity: 0, scale: 0.8 }}
           animate={{ opacity: 1, scale: [0.9, 1.04, 1] }}
           transition={{ delay: 0.8, duration: 1 }}
-          className="text-center bg-gradient-to-r from-amber-200 via-white to-amber-300 bg-clip-text text-5xl font-bold uppercase tracking-[0.18em] text-transparent drop-shadow md:text-8xl"
+          className="text-center bg-gradient-to-r from-amber-200 via-white to-amber-300 bg-clip-text text-4xl font-bold uppercase tracking-[0.18em] text-transparent drop-shadow md:text-7xl"
         >
           Salvos para servir
         </motion.h2>
@@ -935,6 +938,7 @@ function SceneFuture() {
 }
 
 export default function Iglesia33AniversarioLoop() {
+  const [isPaused, setIsPaused] = useState(false);
   const scenes = useMemo(
     () => [
       SceneWelcome,
@@ -948,13 +952,16 @@ export default function Iglesia33AniversarioLoop() {
     []
   );
 
-  const { sceneIndex, cycle } = useSceneLoop(scenes.length, SCENE_DURATION);
+  const { sceneIndex, cycle } = useSceneLoop(scenes.length, SCENE_DURATION, isPaused);
   const CurrentScene = scenes[sceneIndex];
 
   return (
     <div className="relative min-h-screen overflow-hidden bg-slate-950">
       <AnimatedBackground />
-      <FixedBrand />
+      <FixedBrand
+        isPaused={isPaused}
+        onTogglePause={() => setIsPaused((current) => !current)}
+      />
 
       <AnimatePresence mode="wait">
         <CurrentScene key={`${sceneIndex}-${cycle}`} cycle={cycle} />
