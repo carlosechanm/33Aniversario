@@ -3,29 +3,35 @@ import { motion, AnimatePresence } from "framer-motion";
 import { Sparkles, Flame, Church, Star } from "lucide-react";
 
 const SCENE_DURATION = 8000;
+const CHURCH_NAME = 'CENTRO EVANGELISTICO "PENIEL"';
+
+function assetUrl(path) {
+  return new URL(path, import.meta.env.BASE_URL).toString();
+}
+
 const scenePhotos = {
-  welcome: "/fotos/bienvenidos-iglesia.jpg",
+  welcome: assetUrl('fotos/bienvenidos-iglesia.jpg'),
   origin: [
-    "/fotos/origen-1.jpg",
-    "/fotos/origen-2.jpg",
-    "/fotos/origen-3.jpg",
+    assetUrl('fotos/origen-1.jpg'),
+    assetUrl('fotos/origen-2.jpg'),
+    assetUrl('fotos/origen-3.jpg'),
   ],
   process: [
-    "/fotos/proceso-1.jpg",
-    "/fotos/proceso-2.jpg",
-    "/fotos/proceso-3.jpg",
-    "/fotos/proceso-4.jpg",
-    "/fotos/proceso-5.jpg",
+    assetUrl('fotos/proceso-1.jpg'),
+    assetUrl('fotos/proceso-2.jpg'),
+    assetUrl('fotos/proceso-3.jpg'),
+    assetUrl('fotos/proceso-4.jpg'),
+    assetUrl('fotos/proceso-5.jpg'),
   ],
   present: [
-    "/fotos/presente-1.jpg",
-    "/fotos/presente-2.jpg",
-    "/fotos/presente-3.jpg",
+    assetUrl('fotos/presente-1.jpg'),
+    assetUrl('fotos/presente-2.jpg'),
+    assetUrl('fotos/presente-3.jpg'),
   ],
   purpose: [
-    "/fotos/proposito-1.jpg",
-    "/fotos/proposito-2.jpg",
-    "/fotos/proposito-3.jpg",
+    assetUrl('fotos/proposito-1.jpg'),
+    assetUrl('fotos/proposito-2.jpg'),
+    assetUrl('fotos/proposito-3.jpg'),
   ],
 };
 
@@ -60,6 +66,12 @@ const verses = [
 
 function randomFrom(items, index) {
   return items[index % items.length];
+}
+
+function pickTwoFrom(items, index) {
+  const first = items[index % items.length];
+  const second = items[(index + 1) % items.length];
+  return [first, second];
 }
 
 function useSceneLoop(totalScenes, duration) {
@@ -190,7 +202,7 @@ function ScenePhoto({ src, alt, caption, className = "", imageClassName = "" }) 
       <div className="absolute inset-x-0 bottom-0 p-6 md:p-8">
         <div className="inline-flex items-center gap-2 rounded-full border border-white/15 bg-slate-950/40 px-3 py-1 text-xs uppercase tracking-[0.28em] text-white/85 backdrop-blur-md">
           <Church className="h-4 w-4 text-amber-300" />
-          Centro Evangelistico "Peniel"
+          {CHURCH_NAME}
         </div>
         <p className="mt-4 max-w-xl text-sm text-white/75 md:text-base">{caption}</p>
       </div>
@@ -235,13 +247,22 @@ function WelcomeHero({ src, alt }) {
               transition={{ delay: 0.38, duration: 0.9 }}
               className="mx-auto mt-6 max-w-2xl text-lg text-white/80 md:text-2xl"
             >
-              de la fidelidad de Dios en Centro Evangelistico "Peniel"
+              de la fidelidad de Dios en
             </motion.p>
 
             <motion.p
               initial={{ opacity: 0, y: 22 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.52, duration: 0.9 }}
+              transition={{ delay: 0.47, duration: 0.95 }}
+              className="mx-auto mt-4 max-w-4xl bg-gradient-to-r from-amber-200 via-white to-amber-300 bg-clip-text text-2xl font-black uppercase tracking-[0.16em] text-transparent drop-shadow-[0_0_18px_rgba(251,191,36,0.26)] md:text-5xl"
+            >
+              {CHURCH_NAME}
+            </motion.p>
+
+            <motion.p
+              initial={{ opacity: 0, y: 22 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.58, duration: 0.9 }}
               className="mx-auto mt-6 max-w-xl text-sm text-white/70 md:text-base"
             >
               Subí una foto en <span className="text-amber-300">/public/fotos/bienvenidos-iglesia.jpg</span>
@@ -317,7 +338,16 @@ function WelcomeHero({ src, alt }) {
             transition={{ delay: 0.42, duration: 0.9 }}
             className="mx-auto mt-6 max-w-2xl text-lg text-white/85 md:text-2xl"
           >
-            de la fidelidad de Dios en Centro Evangelistico "Peniel"
+            de la fidelidad de Dios en
+          </motion.p>
+
+          <motion.p
+            initial={{ opacity: 0, y: 22 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.5, duration: 0.95 }}
+            className="mx-auto mt-4 max-w-4xl bg-gradient-to-r from-amber-200 via-white to-amber-300 bg-clip-text text-2xl font-black uppercase tracking-[0.16em] text-transparent drop-shadow-[0_0_18px_rgba(251,191,36,0.26)] md:text-5xl"
+          >
+            {CHURCH_NAME}
           </motion.p>
 
           <motion.div
@@ -777,16 +807,34 @@ function ScenePurpose() {
 }
 
 function SceneTestimonies({ cycle }) {
-  const item = randomFrom(testimonyItems, cycle);
+  const items = pickTwoFrom(testimonyItems, cycle);
 
   return (
     <SceneShell>
-      <div className="mx-auto max-w-4xl rounded-[2rem] border border-white/10 bg-white/[0.06] p-6 text-center text-white shadow-2xl shadow-black/20 backdrop-blur-md md:p-10">
+      <div className="mx-auto max-w-6xl text-center text-white">
         <div className="mb-4 text-sm uppercase tracking-[0.35em] text-amber-200">Testimonios</div>
-        <h2 className="text-3xl font-semibold md:text-6xl">{item.title}</h2>
-        <p className="mx-auto mt-5 max-w-2xl text-lg text-white/80 md:text-2xl">{item.subtitle}</p>
-        <div className="mt-8 inline-flex rounded-full border border-amber-300/20 bg-amber-300/10 px-5 py-3 text-sm uppercase tracking-[0.25em] text-amber-200 md:text-base">
-          {item.highlight}
+        <h2 className="text-4xl font-semibold md:text-6xl">Lo que Dios ha hecho en:</h2>
+        <h2 className="text-4xl font-semibold md:text-6xl">{CHURCH_NAME}</h2>
+        <p className="mx-auto mt-5 max-w-3xl text-lg text-white/78 md:text-2xl">
+          Muchas voces, muchas experiencias y una misma fidelidad de Dios obrando en la iglesia.
+        </p>
+
+        <div className="mt-10 grid gap-5 md:grid-cols-2">
+          {items.map((item, index) => (
+            <motion.div
+              key={item.title + index}
+              initial={{ opacity: 0, y: 22, scale: 0.98 }}
+              animate={{ opacity: 1, y: 0, scale: 1 }}
+              transition={{ delay: 0.15 + index * 0.12, duration: 0.85 }}
+              className="rounded-[2rem] border border-white/10 bg-white/[0.06] p-6 text-center shadow-2xl shadow-black/20 backdrop-blur-md md:p-10"
+            >
+              <h3 className="text-3xl font-semibold md:text-5xl">{item.title}</h3>
+              <p className="mx-auto mt-5 max-w-2xl text-lg text-white/80 md:text-2xl">{item.subtitle}</p>
+              <div className="mt-8 inline-flex rounded-full border border-amber-300/20 bg-amber-300/10 px-5 py-3 text-sm uppercase tracking-[0.25em] text-amber-200 md:text-base">
+                {item.highlight}
+              </div>
+            </motion.div>
+          ))}
         </div>
       </div>
     </SceneShell>
@@ -803,7 +851,7 @@ function SceneFuture() {
           transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
         />
         <h2 className="text-4xl font-semibold md:text-6xl">Lo mejor aún está por venir</h2>
-        <p className="mt-8 text-xl text-white/80 md:text-3xl">Centro Evangelistico "Peniel"</p>
+        <p className="mt-8 bg-gradient-to-r from-amber-200 via-white to-amber-300 bg-clip-text text-2xl font-black uppercase tracking-[0.16em] text-transparent drop-shadow-[0_0_18px_rgba(251,191,36,0.26)] md:text-5xl">{CHURCH_NAME}</p>
         <p className="mt-3 text-sm uppercase tracking-[0.35em] text-amber-200 md:text-base">33 años de fidelidad</p>
 
         <motion.div
@@ -853,6 +901,8 @@ export default function Iglesia33AniversarioLoop() {
     </div>
   );
 }
+
+
 
 
 
