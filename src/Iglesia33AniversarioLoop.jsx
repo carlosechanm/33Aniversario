@@ -351,10 +351,22 @@ function WelcomeHero({ src, alt }) {
             {CHURCH_NAME}
           </motion.p>
 
+          <motion.p
+            initial={{ opacity: 0, y: 22 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.56, duration: 0.9 }}
+            className="mx-auto mt-6 max-w-3xl text-base text-white/78 md:text-xl"
+          >
+            "Grandes cosas ha hecho Jehová con nosotros; estaremos alegres."
+            <span className="mt-2 block text-sm uppercase tracking-[0.22em] text-amber-200/90 md:text-base">
+              Salmo 126:3
+            </span>
+          </motion.p>
+
           <motion.div
             initial={{ opacity: 0, y: 22 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.58, duration: 0.9 }}
+            transition={{ delay: 0.64, duration: 0.9 }}
             className="mt-8 flex flex-wrap items-center justify-center gap-3"
           >
             <div className="inline-flex rounded-full border border-white/10 bg-white/[0.08] px-5 py-3 text-sm uppercase tracking-[0.28em] text-white/85 backdrop-blur-md">
@@ -418,8 +430,11 @@ function SceneOrigin() {
             transition={{ delay: 0.25, duration: 0.9 }}
             className="mt-6 max-w-2xl text-lg text-white/78 md:text-2xl"
           >
-            Aquí podemos mostrar cómo inició la iglesia, recordando los primeros pasos,
-            los comienzos sencillos y la fidelidad de Dios desde el principio.
+            "Porque yo sé los pensamientos que tengo acerca de vosotros, dice Jehová,
+            pensamientos de paz, y no de mal, para daros el fin que esperáis."
+            <span className="mt-3 block text-sm uppercase tracking-[0.22em] text-amber-200/90 md:text-base">
+              Jeremías 29:11
+            </span>
           </motion.p>
 
           <motion.div
@@ -517,8 +532,11 @@ function SceneProcess({ cycle }) {
           </div>
           <h2 className="mt-6 text-4xl font-semibold md:text-6xl">{line}</h2>
           <p className="mx-auto mt-5 max-w-3xl text-lg text-white/78 md:text-2xl">
-            Un recorrido visual de cómo la iglesia ha ido creciendo, cambiando y avanzando
-            con la ayuda de Dios a través del tiempo.
+            "Estando persuadido de esto, que el que comenzó en vosotros la buena obra,
+            la perfeccionará hasta el día de Jesucristo."
+            <span className="mt-3 block text-sm uppercase tracking-[0.22em] text-amber-200/90 md:text-base">
+              Filipenses 1:6
+            </span>
           </p>
         </div>
 
@@ -611,6 +629,12 @@ function ScenePresent({ cycle }) {
           <h2 className="text-4xl font-semibold md:text-6xl">Hoy seguimos viendo su fidelidad</h2>
           <p className="mx-auto mt-6 max-w-3xl text-lg text-white/80 md:text-2xl">
             {randomFrom(verses, cycle)}
+          </p>
+          <p className="mx-auto mt-4 max-w-3xl text-base text-white/72 md:text-xl">
+            "Jesucristo es el mismo ayer, y hoy, y por los siglos."
+            <span className="mt-3 block text-sm uppercase tracking-[0.22em] text-amber-200/90 md:text-base">
+              Hebreos 13:8
+            </span>
           </p>
         </div>
 
@@ -713,6 +737,15 @@ function ScenePurpose() {
           >
             No solo para recibir...
           </motion.p>
+
+          <motion.p
+            initial={{ opacity: 0, y: 18 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.7, duration: 0.8 }}
+            className="mt-4 text-2xl font-semibold text-amber-200 md:text-4xl"
+          >
+            Sino para servir con amor y propósito.
+          </motion.p>
         </div>
 
         <div className="grid gap-4 md:grid-cols-[0.95fr_1.05fr]">
@@ -794,6 +827,19 @@ function ScenePurpose() {
           </motion.div>
         </div>
 
+        <motion.p
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.5, duration: 0.85 }}
+          className="mx-auto max-w-4xl text-center text-base text-white/76 md:text-xl"
+        >
+          "Cada uno según el don que ha recibido, minístrelo a los otros, como buenos
+          administradores de la multiforme gracia de Dios."
+          <span className="mt-3 block text-sm uppercase tracking-[0.22em] text-amber-200/90 md:text-base">
+            1 Pedro 4:10
+          </span>
+        </motion.p>
+
         <motion.h2
           initial={{ opacity: 0, scale: 0.8 }}
           animate={{ opacity: 1, scale: [0.9, 1.04, 1] }}
@@ -821,7 +867,10 @@ function SceneTestimonies({ cycle }) {
           </p>
         </div>
         <p className="mx-auto mt-5 max-w-3xl text-lg text-white/78 md:text-2xl">
-          Muchas voces, muchas experiencias y una misma fidelidad de Dios obrando en la iglesia.
+          "Vengan y oigan, todos los que temen a Dios, y contaré lo que ha hecho a mi alma."
+          <span className="mt-3 block text-sm uppercase tracking-[0.22em] text-amber-200/90 md:text-base">
+            Salmo 66:16
+          </span>
         </p>
 
         <div className="mt-10 grid gap-5 md:grid-cols-2">
@@ -858,6 +907,13 @@ function SceneFuture() {
         <h2 className="text-4xl font-semibold md:text-6xl">Lo mejor aún está por venir</h2>
         <p className="mt-8 bg-gradient-to-r from-amber-200 via-white to-amber-300 bg-clip-text text-2xl font-black uppercase tracking-[0.16em] text-transparent drop-shadow-[0_0_18px_rgba(251,191,36,0.26)] md:text-5xl">{CHURCH_NAME}</p>
         <p className="mt-3 text-sm uppercase tracking-[0.35em] text-amber-200 md:text-base">33 años de fidelidad</p>
+        <p className="mx-auto mt-6 max-w-3xl text-base text-white/76 md:text-xl">
+          "Porque aún hay visión para el tiempo señalado; se apresura hacia el fin, y no
+          mentirá."
+          <span className="mt-3 block text-sm uppercase tracking-[0.22em] text-amber-200/90 md:text-base">
+            Habacuc 2:3
+          </span>
+        </p>
 
         <motion.div
           initial={{ opacity: 0, y: 24, scale: 0.92 }}
