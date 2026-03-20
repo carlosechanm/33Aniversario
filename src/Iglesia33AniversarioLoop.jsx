@@ -684,19 +684,26 @@ function ScenePresent({ cycle }) {
           {scenePhotos.present.map((src, index) => {
             const hasError = !!erroredImages[index];
             const isLarge = index === 0;
-            const imagePositionClass = isLarge
-              ? "object-center"
-              : index === 1
-                ? "object-[center_22%]"
-                : "object-[center_35%]";
+            const isTallCard = index === 1;
+            const imagePositionClass = index === 1
+              ? "object-cover object-[center_top]"
+              : "object-cover object-[center_35%]";
             const wrapperClass = [
-              "relative overflow-hidden rounded-[2rem] border border-white/10 bg-white/[0.07] shadow-2xl shadow-black/25",
-              isLarge ? "min-h-[360px] md:min-h-[380px]" : "min-h-[210px] md:min-h-[235px]",
+              "relative self-start overflow-hidden rounded-[2rem] border border-white/10 bg-white/[0.07] shadow-2xl shadow-black/25",
+              isLarge
+                ? "min-h-[360px] md:min-h-[380px]"
+                : isTallCard
+                  ? "min-h-[300px] md:min-h-[320px]"
+                  : "min-h-[210px] md:min-h-[235px]",
             ].join(" ");
             const imageClass = [
-              "w-full object-cover",
+              "w-full",
               imagePositionClass,
-              isLarge ? "h-[360px] md:h-[380px]" : "h-[210px] md:h-[235px]",
+              isLarge
+                ? "h-[360px] md:h-[380px]"
+                : isTallCard
+                  ? "h-[300px] md:h-[320px]"
+                  : "h-[210px] md:h-[235px]",
             ].join(" ");
 
             return (
@@ -708,7 +715,16 @@ function ScenePresent({ cycle }) {
                 className={wrapperClass}
               >
                 {hasError ? (
-                  <div className={["relative flex items-end p-6", isLarge ? "h-[360px] md:h-[380px]" : "h-[210px] md:h-[235px]"].join(" ")}>
+                  <div
+                    className={[
+                      "relative flex items-end p-6",
+                      isLarge
+                        ? "h-[360px] md:h-[380px]"
+                        : isTallCard
+                          ? "h-[300px] md:h-[320px]"
+                          : "h-[210px] md:h-[235px]",
+                    ].join(" ")}
+                  >
                     <div className="absolute inset-0 bg-[radial-gradient(circle_at_top,rgba(251,191,36,0.18),transparent_35%),linear-gradient(180deg,rgba(255,255,255,0.08),rgba(15,23,42,0.65))]" />
                     <div className="relative z-10">
                       <div className="mb-3 inline-flex items-center gap-2 rounded-full border border-amber-300/20 bg-amber-300/10 px-3 py-1 text-xs uppercase tracking-[0.25em] text-amber-200">
