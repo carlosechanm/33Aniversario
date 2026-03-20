@@ -28,6 +28,7 @@ const scenePhotos = {
     assetUrl('fotos/presente-1.jpg'),
     assetUrl('fotos/presente-2.jpg'),
     assetUrl('fotos/presente-3.jpg'),
+    assetUrl('fotos/presente-4.jpg'),
   ],
   purpose: [
     assetUrl('fotos/proposito-1.jpg'),
@@ -60,14 +61,43 @@ const testimonyItems = [
 ];
 
 
-function randomFrom(items, index) {
-  return items[index % items.length];
+function createSeededRandom(seed) {
+  let value = (seed + 1) * 214013 + 2531011;
+
+  return () => {
+    value = (value * 1664525 + 1013904223) >>> 0;
+    return value / 4294967296;
+  };
 }
 
-function pickTwoFrom(items, index) {
-  const first = items[index % items.length];
-  const second = items[(index + 1) % items.length];
-  return [first, second];
+function getShuffledOrder(length, round) {
+  const order = Array.from({ length }, (_, index) => index);
+  const random = createSeededRandom(round);
+
+  for (let index = order.length - 1; index > 0; index -= 1) {
+    const swapIndex = Math.floor(random() * (index + 1));
+    [order[index], order[swapIndex]] = [order[swapIndex], order[index]];
+  }
+
+  return order;
+}
+
+function randomFrom(items, index) {
+  const round = Math.floor(index / items.length);
+  const position = index % items.length;
+  const order = getShuffledOrder(items.length, round);
+  return items[order[position]];
+}
+
+function pickManyFrom(items, index, count) {
+  const stepsPerRound = Math.ceil(items.length / count);
+  const round = Math.floor(index / stepsPerRound);
+  const position = index % stepsPerRound;
+  const start = position * count;
+  const order = getShuffledOrder(items.length, round);
+  const selectedIndexes = order.slice(start, start + count);
+
+  return selectedIndexes.map((itemIndex) => items[itemIndex]);
 }
 
 function useSceneLoop(totalScenes, duration, isPaused = false) {
@@ -654,13 +684,19 @@ function ScenePresent({ cycle }) {
           {scenePhotos.present.map((src, index) => {
             const hasError = !!erroredImages[index];
             const isLarge = index === 0;
+            const imagePositionClass = isLarge
+              ? "object-center"
+              : index === 1
+                ? "object-[center_22%]"
+                : "object-[center_35%]";
             const wrapperClass = [
               "relative overflow-hidden rounded-[2rem] border border-white/10 bg-white/[0.07] shadow-2xl shadow-black/25",
-              isLarge ? "min-h-[360px] md:min-h-[380px]" : "min-h-[170px] md:min-h-[185px]",
+              isLarge ? "min-h-[360px] md:min-h-[380px]" : "min-h-[210px] md:min-h-[235px]",
             ].join(" ");
             const imageClass = [
               "w-full object-cover",
-              isLarge ? "h-[360px] md:h-[380px]" : "h-[170px] md:h-[185px]",
+              imagePositionClass,
+              isLarge ? "h-[360px] md:h-[380px]" : "h-[210px] md:h-[235px]",
             ].join(" ");
 
             return (
@@ -672,7 +708,7 @@ function ScenePresent({ cycle }) {
                 className={wrapperClass}
               >
                 {hasError ? (
-                  <div className={["relative flex items-end p-6", isLarge ? "h-[360px] md:h-[380px]" : "h-[170px] md:h-[185px]"].join(" ")}>
+                  <div className={["relative flex items-end p-6", isLarge ? "h-[360px] md:h-[380px]" : "h-[210px] md:h-[235px]"].join(" ")}>
                     <div className="absolute inset-0 bg-[radial-gradient(circle_at_top,rgba(251,191,36,0.18),transparent_35%),linear-gradient(180deg,rgba(255,255,255,0.08),rgba(15,23,42,0.65))]" />
                     <div className="relative z-10">
                       <div className="mb-3 inline-flex items-center gap-2 rounded-full border border-amber-300/20 bg-amber-300/10 px-3 py-1 text-xs uppercase tracking-[0.25em] text-amber-200">
@@ -857,7 +893,7 @@ function ScenePurpose() {
 }
 
 function SceneTestimonies({ cycle }) {
-  const items = pickTwoFrom(testimonyItems, cycle);
+  const items = pickManyFrom(testimonyItems, cycle, 2);
 
   return (
     <SceneShell>
