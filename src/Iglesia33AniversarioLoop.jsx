@@ -655,7 +655,6 @@ function SceneProcess({ cycle }) {
 
 function ScenePresent({ cycle }) {
   const [erroredImages, setErroredImages] = useState({});
-
   const handleImageError = (index) => {
     setErroredImages((current) => ({ ...current, [index]: true }));
   };
