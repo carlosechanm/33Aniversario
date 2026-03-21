@@ -997,7 +997,7 @@ export default function Iglesia33AniversarioLoop() {
       SceneProcess,
       ScenePresent,
       ScenePurpose,
-      SceneTestimonies,
+      // SceneTestimonies,
       SceneFuture,
     ],
     []
